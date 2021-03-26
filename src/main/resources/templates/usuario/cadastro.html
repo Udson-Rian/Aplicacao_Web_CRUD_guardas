@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt" layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>Cadastro de Guardas</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+	crossorigin="anonymous">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+	integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+	crossorigin="anonymous"></script>
+
+<!-- jQuery Autocomplete -->
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+	
+		$(function() {
+			$("#profissao").autocomplete({
+				source: "/usuarios/autocompleteProfissoes",
+				minLength: 1,
+				select: function (event, ui) {
+					this.value = ui.item.label;
+					$("#idProfissao").val(ui.item.value);
+					return false;
+				}
+			});
+		});
+	
+	</script>
+</head>
+<body style="background-color: Gainsboro;">
+
+	<section layout:fragment="corpo">
+		<div class="container">
+			<br />
+			<h2>
+				Cadastro de Guardas<span class="badge bg-secondary">SPB</span>
+			</h2>
+			<br />
+
+			<!-- div utilizado para carregar as mensagens de validação na página -->
+			<div th:if="${msgsErro} != null">
+				<ul>
+					<li th:each="m : ${msgsErro}"><b th:text="${m}"
+						style="color: red;"></b></li>
+				</ul>
+			</div>
+
+			<div th:replace="fragments/mensagens"></div>
+
+			<div class="conteiner">
+				<form th:action="@{/usuarios/salvar}" th:object="${guarda}"
+					method="post" enctype="multipart/form-data">
+
+					<input type="hidden" th:field="${guarda.id}" />
+
+					<table>
+						<tr>
+							<td><div class="mb-3">
+									<label for="exampleInputPassword1" class="form-label">NOME:</label>
+									<input type="text" class="form-control"
+										id="exampleFormControlInput1" th:field="${guarda.nome}">
+								</div></td>
+						</tr>
+						<tr>
+							<td><div class="mb-3">
+									<label for="exampleInputPassword1" class="form-label">EMAIL:</label>
+									<input type="email" class="form-control"
+										id="exampleFormControlInput1" placeholder="name@example.com"
+										th:field="${guarda.email}">
+								</div></td>
+						</tr>
+						<tr>
+							<td><div class="mb-3">
+									<label for="exampleInputPassword1" class="form-label">SENHA:</label>
+									<input type="password" class="form-control"
+										id="exampleInputPassword1" th:field="${guarda.senha}">
+								</div></td>
+						</tr>
+						<tr>
+							<td><label for="exampleInputPassword1" class="form-label">SEXO:</label>
+								<input type="radio" class="form-check-input"
+								th:field="${guarda.sexo}" th:value="M" /> Masculino <input
+								type="radio" class="form-check-input" th:field="${guarda.sexo}"
+								th:value="F" /> Feminino</td>
+						</tr>
+						<tr>
+							<td><label for="exampleInputPassword1" class="form-label">NÍVEL
+									ESCOLAR:</label> <input class="form-control" id="profissao"
+								th:field="${guarda.nivelEscolar.nome}"> <input
+								id="idProfissao" type="hidden"
+								th:field="${guarda.nivelEscolar.id}"></td>
+						</tr>
+						<tr>
+							<td>
+								<div class="mb-3">
+									<label for="formFile" class="form-label">FOTO:</label>
+									<input class="form-control" type="file"
+										id="formFile" th:name="file">
+									<input type="hidden" th:field="${guarda.foto.id}">	
+								</div>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<table>
+						<tr>
+							<td><input class="btn btn-outline-primary" type="submit"
+								th:value="${guarda.id} == 0 ? Cadastrar : Editar" /> <input
+								class="btn btn-outline-danger" type="submit" value="Cancelar"
+								formaction="/" formmethod="get" /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>
