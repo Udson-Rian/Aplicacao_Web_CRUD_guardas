@@ -1,0 +1,1 @@
+Neste projeto foi efetuado o levantamento dos requisitos necessários, solicitados pelo cliente, para a construção de uma Aplicação Web capaz de registrar, remover, editar e visualizar um usuário através de seus dados.
